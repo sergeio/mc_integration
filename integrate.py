@@ -15,7 +15,10 @@ def num_under_curve(func, coordinates):
     """# points in :param coordinates: falling under the curve :param func:."""
     def is_under_curve(xy):
         x, y = xy
-        return y < func(x)
+        true_y = func(x)
+        if true_y > 0 and y >= 0 and y < true_y: return 1
+        if true_y < 0 and y <= 0 and y > true_y: return -1
+        return 0
     return sum(imap(is_under_curve, coordinates))
 
 
@@ -35,10 +38,8 @@ def get_min_max_for_func(func, xmin, xmax, num_points=100000):
     min_val, max_val = xmin, xmin
 
     for y in imap(func, frange(xmin, xmax, step)):
-        if y < min_val:
-            min_val = y
-        elif y > max_val:
-            max_val = y
+        if y < min_val: min_val = y
+        elif y > max_val: max_val = y
 
     return min_val, max_val
 

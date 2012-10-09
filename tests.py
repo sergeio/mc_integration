@@ -34,9 +34,18 @@ def test_integrate_linear_func_zero_to_one():
     assert abs(
         monte_carlo_integrate(linear, 0, 1, num_points=10000) - .5) < .02
 
+
 def test_integrate_linear_func_zero_to_two():
     assert abs(
-        monte_carlo_integrate(linear, 0, 2, num_points=10000) - 2) < .04
+        monte_carlo_integrate(linear, 0, 2, num_points=10000) - 2) < .05
+
+
+def test_integrate_linear_func_neg_one_to_two():
+    # a = monte_carlo_integrate(linear, -1, 2, num_points=100000)
+    # print a, abs(a - 1.5) < .03
+    assert abs(
+        monte_carlo_integrate(linear, -1, 2, num_points=100000) - 1.5) < .05
+
 
 def test_getting_min_max_for_linear_func():
     x, y = get_min_max_for_func(linear, 0, 1)
