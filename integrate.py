@@ -2,9 +2,13 @@ from itertools import imap
 from random import uniform
 
 
-def monte_carlo_integrate(func, min_x, max_x, num_points=100):
-    points = make_random_points((min_x, 0), (max_x, 1), num_points=num_points)
-    return num_under_curve(func, points) / float(num_points)
+def monte_carlo_integrate(func, xmin, xmax, num_points=100):
+    ymin, ymax = get_min_max_for_func(func, xmin, xmax)
+    rectangle_area = (ymax - ymin) * (xmax - xmin)
+    points = make_random_points(
+        (xmin, ymin), (xmax, ymax), num_points=num_points)
+    ratio_under_curve = num_under_curve(func, points) / float(num_points)
+    return rectangle_area * ratio_under_curve
 
 
 def num_under_curve(func, coordinates):
@@ -15,9 +19,33 @@ def num_under_curve(func, coordinates):
     return sum(imap(is_under_curve, coordinates))
 
 
+def get_min_max_for_func(func, xmin, xmax, num_points=100000):
+    """Get the minimum and maximum values for the given function and range.
+
+    ..note: This is an approximation.
+
+    """
+    def frange(start, stop, step):
+        """Like xrange, but works with floats."""
+        while start < stop:
+            yield start
+            start += step
+
+    step = (xmax - xmin) / float(num_points)
+    min_val, max_val = xmin, xmin
+
+    for y in imap(func, frange(xmin, xmax, step)):
+        if y < min_val:
+            min_val = y
+        elif y > max_val:
+            max_val = y
+
+    return min_val, max_val
+
+
 def make_random_points(min_corner, max_corner, num_points=100):
     """Returns random coordinate pairs in the rectangle defined."""
-    min_x, min_y = min_corner
-    max_x, max_y = max_corner
-    return ((uniform(min_x, max_x), uniform(min_y, max_y)) \
+    xmin, ymin = min_corner
+    xmax, ymax = max_corner
+    return ((uniform(xmin, xmax), uniform(ymin, ymax)) \
         for i in xrange(num_points))
