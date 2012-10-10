@@ -3,6 +3,16 @@ from random import uniform
 
 
 def monte_carlo_integrate(func, xmin, xmax, num_points=100):
+    """Performs definite integration on :param func:.
+
+    The range is specified by the range :param xmin: < :param xmax:
+    :param num_points: defines the resolution of the grid.  Higher numbers
+        will yield more accurate results, at the cost of time.
+
+    .. note:: Increasing num points will have diminishing returns.
+        Error ~= 1 / sqrt(:param num_points:)
+
+    """
     ymin, ymax = get_min_max_for_func(func, xmin, xmax)
     rectangle_area = (ymax - ymin) * (xmax - xmin)
     points = make_random_points((xmin, ymin), (xmax, ymax), num_points)
