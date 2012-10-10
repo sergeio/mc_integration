@@ -34,11 +34,10 @@ class WhenEvaluatingPointsUnderCurve(TestCase):
         assert num_under_curve(linear, [(1, 0), (.5, .4), (2, 3)]) == 2
 
     def test_make_random_points_returns_correct_number_results(self):
-        assert len(
-            list(make_random_points((0, 0), (1, 1), num_points=10))) == 10
+        assert len(list(make_random_points((0, 0), (1, 1), 10))) == 10
 
     def test_make_random_points_returns_all_valid_points(self):
-        for x, y in make_random_points((0, -3), (10, -1), num_points=30):
+        for x, y in make_random_points((0, -3), (10, -1), 30):
             assert 0 <= x <= 10 and -3 <= y <= -1
 
 

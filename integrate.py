@@ -5,8 +5,7 @@ from random import uniform
 def monte_carlo_integrate(func, xmin, xmax, num_points=100):
     ymin, ymax = get_min_max_for_func(func, xmin, xmax)
     rectangle_area = (ymax - ymin) * (xmax - xmin)
-    points = make_random_points(
-        (xmin, ymin), (xmax, ymax), num_points=num_points)
+    points = make_random_points((xmin, ymin), (xmax, ymax), num_points)
     ratio_under_curve = num_under_curve(func, points) / float(num_points)
     return rectangle_area * ratio_under_curve
 
@@ -44,7 +43,7 @@ def get_min_max_for_func(func, xmin, xmax, num_points=100000):
     return min_val, max_val
 
 
-def make_random_points(min_corner, max_corner, num_points=100):
+def make_random_points(min_corner, max_corner, num_points):
     """Returns random coordinate pairs in the rectangle defined."""
     xmin, ymin = min_corner
     xmax, ymax = max_corner
