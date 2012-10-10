@@ -35,7 +35,7 @@ def get_min_max_for_func(func, xmin, xmax, num_points=100000):
             start += step
 
     step = (xmax - xmin) / float(num_points)
-    min_val, max_val = xmin, xmin
+    min_val, max_val = 0, 0
 
     for y in imap(func, frange(xmin, xmax, step)):
         if y < min_val: min_val = y

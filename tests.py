@@ -10,6 +10,11 @@ from integrate import (
 def linear(x):
     return x
 
+def composite(x):
+    if x < 0:
+        return 0
+    return x
+
 
 ####
 ##
@@ -68,6 +73,13 @@ class WhenTestingIntegrationFunction(TestCase):
 
     def test_integrate_linear_func_neg_one_to_five(self):
         self.assert_integration_correct(linear, -1, 5, 12)
+
+    def test_integrate_composite_func_neg_100_to_one(self):
+        self.assert_integration_correct(
+            composite, -100, 1, .5, num_points=500000)
+
+    def test_all_negative_integral(self):
+        self.assert_integration_correct(linear, -10, -5, -37.5)
 
 
 ####
