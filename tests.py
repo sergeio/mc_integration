@@ -45,22 +45,29 @@ class WhenEvaluatingPointsUnderCurve(TestCase):
 
 class WhenTestingIntegrationFunction(TestCase):
 
-    def assert_integration_correct(
-            self, func, xmin, xmax, expected, error, num_points=10000):
+    def assert_integration_correct(self, func, xmin, xmax, expected,
+                                   expected_err=10, num_points=10000):
         result = monte_carlo_integrate(func, xmin, xmax, num_points=num_points)
-        if abs(result - expected) > error:
-            raise AssertionError(
-                'Expected {0}; got {1}'.format(expected, result))
+        percent_error = abs((result - expected) / expected * 100)
+        if percent_error > expected_err:
+            raise AssertionError('Expected {0}; got {1}; err {2}'.format(
+                expected, result, percent_error))
+        return percent_error
 
     def test_integrate_linear_func_zero_to_one(self):
-        self.assert_integration_correct(linear, 0, 1, .5, .02)
+        self.assert_integration_correct(linear, 0, 1, .5)
 
     def test_integrate_linear_func_zero_to_two(self):
-        self.assert_integration_correct(linear, 0, 2, 2, .05)
+        self.assert_integration_correct(linear, 0, 2, 2)
 
     def test_integrate_linear_func_neg_one_to_two(self):
-        self.assert_integration_correct(
-            linear, -1, 2, 1.5, .05, num_points=100000)
+        self.assert_integration_correct(linear, -1, 2, 1.5)
+
+    def test_integrate_linear_func_one_to_two(self):
+        self.assert_integration_correct(linear, 1, 2, 1.5)
+
+    def test_integrate_linear_func_neg_one_to_five(self):
+        self.assert_integration_correct(linear, -1, 5, 12)
 
 
 ####
