@@ -9,6 +9,12 @@ from integrate import (
 def linear(x):
     return x
 
+def assert_integration_correct(
+        func, xmin, xmax, expected, error, num_points=10000):
+    result = monte_carlo_integrate(func, xmin, xmax, num_points=num_points)
+    if abs(result - expected) > error:
+        raise AssertionError('Expected {0}; got {1}'.format(expected, result))
+
 def test_compare_function_1_value():
     assert num_under_curve(linear, [(1, 0)]) == 1
 
@@ -31,20 +37,15 @@ def test_make_random_points_returns_all_valid_points():
 
 
 def test_integrate_linear_func_zero_to_one():
-    assert abs(
-        monte_carlo_integrate(linear, 0, 1, num_points=10000) - .5) < .02
+    assert_integration_correct(linear, 0, 1, .5, .02, num_points=10000)
 
 
 def test_integrate_linear_func_zero_to_two():
-    assert abs(
-        monte_carlo_integrate(linear, 0, 2, num_points=10000) - 2) < .05
+    assert_integration_correct(linear, 0, 2, 2, .05, num_points=10000)
 
 
 def test_integrate_linear_func_neg_one_to_two():
-    # a = monte_carlo_integrate(linear, -1, 2, num_points=100000)
-    # print a, abs(a - 1.5) < .03
-    assert abs(
-        monte_carlo_integrate(linear, -1, 2, num_points=100000) - 1.5) < .05
+    assert_integration_correct(linear, -1, 2, 1.5, .05, num_points=100000)
 
 
 def test_getting_min_max_for_linear_func():
@@ -65,7 +66,7 @@ def run_tests():
                 print '.',
                 passed += 1
             except AssertionError as e:
-                print 'F', key
+                print 'F', key, e
 
     print '\nPassed {0} / {1} tests.'.format(passed, total)
 
